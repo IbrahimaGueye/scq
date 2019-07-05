@@ -25,5 +25,3 @@ while var.continuer:
         # Menu principal
         var.on_screen = "principale"
         fonctions.afficher_menu(menus.menu_principal_txt, menus.menu_principal_funcs)
-
-# Give it try...
