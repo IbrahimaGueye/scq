@@ -8,8 +8,7 @@ import pickle
 
 def ajouter_infos(fichier, info):
     """
-
-    :return:
+    Fonction chargée d'ajouter un info/tip
     """
     with open("..//data//infos//%s" % fichier, "rb") as file:
         lecteur = pickle.Unpickler(file)
@@ -24,8 +23,6 @@ def ajouter_infos(fichier, info):
 def modifier_info(fichier):
     """
     Fonction chargée de modifier un info/tip
-    :param fichier:
-    :return:
     """
     i = 1
     with open("..//data//infos//%s" % fichier, "rb") as file:
@@ -54,8 +51,6 @@ def modifier_info(fichier):
 def supprimer_info(fichier):
     """
     Fonction chargée de supprimer un info/tip
-    :param fichier:
-    :return:
     """
     i = 1
     with open("..//data//infos//%s" % fichier, "rb") as file:

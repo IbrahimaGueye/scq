@@ -15,6 +15,8 @@ continuer = True
 
 on_screen = "principale"
 
+working_function = ""
+
 questions = list()
 
 congrats = [
@@ -40,5 +42,5 @@ Tapez le numero devant l'option pour la choisir puis appuyez sur "Entrée" pour 
 """
 
 apropos = """Sources des Questions et lecons: http://qcm-sciencesphysiques.blogspot.com, www.bac-s.net/quiz\n
-Crée par Igueye avec <3 et Python
+Crée par Igueye avec <3 et Python\n\nContacter:\n    Email: ibzero28700@gmail.com\n    Tel: [Something here, lol]        
 """

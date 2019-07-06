@@ -34,9 +34,6 @@ def create_quizz_question(classe, lecon):
 def add_question(classe, lecon, question):
     """
     Fonction chargee d'ajouter une question sur la liste
-    :param classe:
-    :param question:
-    :return question list:
     """
     path_to_questions = "..//data//questions//" + classe + "//" + lecon
 
@@ -56,7 +53,6 @@ def add_question(classe, lecon, question):
 def create_question():
     """
     Fonction chargee de creer une nouvelle question
-    :return list:
     """
     liste = list()
 
