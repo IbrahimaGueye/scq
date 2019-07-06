@@ -122,6 +122,7 @@ def creer_compte(nom_utilisateur=""):
     sinon on l'y ajoute et on cree un autre fichier pour l'utilisateur
     
     """
+    cookies = {}
     clear_screen()
     if nom_utilisateur == "":
         nom_utilisateur = input("Choisissez un nom d'utilisateur: ")
@@ -142,8 +143,16 @@ def creer_compte(nom_utilisateur=""):
             classe = input("Maintenant dites nous votre classe(2nd, 1er ou tle): ")
 
             if classe in var.classes:
+                # Creations des cookies de questions
+                with open("..//data//questions//%s//liste_lecons" % classe, "rb") as file:
+                    reader = pickle.Unpickler(file)
+                    lecons = reader.load()
+
+                for lecon in lecons:
+                    cookies[lecon] = []
+
                 # on enregistre l'utilistateur
-                utilisateur = User.User(nom_utilisateur, classe)
+                utilisateur = User.User(nom_utilisateur, classe, cookies)
 
                 with open("..//data//users//" + nom_utilisateur, "wb") as usr:
                     writer = pickle.Pickler(usr)
@@ -372,7 +381,12 @@ def init_question(classe, lecon):
 
     with open("..//data//questions//%s//%s" % (classe, lecon), "rb") as fichier:
         lecteur = pickle.Unpickler(fichier)
-        return lecteur.load()
+        questions = lecteur.load()
+
+        for elt in var.utilisateur.reponses_cookies[lecon]:
+            questions.pop(elt)
+
+        return questions
 
 
 # ......................................................................................................................
@@ -412,6 +426,8 @@ def poser_question(questions, lecon):
     if answers[user_input - 1] == right_answer:
         var.utilisateur.aug_score(risque)
         print("\n%s, points +%d\n" % (random.choice(var.congrats), risque))
+        # On ajoute la question a la liste des questions trouvées...
+        var.utilisateur.reponses_cookies[lecon].append(q_id)
 
 
     else:
@@ -472,7 +488,7 @@ def jouer():
     while on_play:
         if len(var.questions) == 0:
             clear_screen()
-            print("Vous avez repondu correctement à toutes les questions! {}!".format(random.choice(var.congrats)))
+            print("Vous avez repondu correctement à toutes les questions! %s!" % (random.choice(var.congrats)))
             input("<<< Retour")
             on_play = False
             save()

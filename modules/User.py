@@ -15,16 +15,21 @@ class User:
     
     """
 
-    def __init__(self, nom_utilisateur="", classe=""):
+    def __init__(self, nom_utilisateur="", classe="", cookies=None):
+        if cookies is None:
+            cookies = {}
+
         self.nom_utilisateur = nom_utilisateur
         self.classe = classe
         self.score = 0
         self.privilege = 0
+        self.reponses_cookies = cookies
 
     # ..............................................................................
     def __repr__(self):
-        return "{}; Classe: {} // Score: {} // Privilege: {} \
-                ".format(self.nom_utilisateur, self.classe, self.score, self.privilege)
+        return "%s; Classe: %s // Score: %d // Privilege: %d\n cookies: %s " % (self.nom_utilisateur, self.classe,
+                                                                                self.score, self.privilege,
+                                                                                str(self.reponses_cookies))
 
     # ..............................................................................
     def change_nom_utilisateur(self, nouveau):
@@ -35,6 +40,7 @@ class User:
     def reset_compte(self):
         self.score = 0
         self.privilege = 0
+        self.reponses_cookies = {}
         print("Compte reinitilaisé")
 
     # ..............................................................................
