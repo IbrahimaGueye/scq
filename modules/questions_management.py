@@ -155,13 +155,13 @@ def supprimer_elt_question(classe, lecon, q_id):
             writer = pickle.Pickler(fichier)
             writer.dump(questions)
 
-# liste = ["Ressources énergétiques - Conversion d'énergie",
-#          "Champs et forces",
-#          "Formes et conservation de l'énergie",
+# liste = ["Temps et cinématique",
+#          "Temps, cinématique et dynamique newtoniennes",
+#          "Lois de Newton : conservation de la quantité de mouvement",
 #          ]
 #
 # for lecon in liste:
-#     create_quizz_question("1er", lecon)
-#     print("(%s) Crée avec succés") % lecon)
+#     create_quizz_question("tle", lecon)
+#     print("(%s) Crée avec succés" % lecon)
 
 # add_question("2nd", "Mouvement", create_question())
