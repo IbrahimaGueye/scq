@@ -386,7 +386,7 @@ def poser_question(questions, lecon):
     print("Questions sur %s\n" % lecon)
 
     q_id = random.randrange(len(questions))
-    risque = random.randint(100, 200)  # Points perdu ou gagné
+    risque = random.choice(var.risques)  # Points perdus ou gagnés
 
     question_choisie = questions[q_id]  # La question choisie parmi la liste donnée.
     right_answer = question_choisie[1]  # La bonne reponse.
@@ -396,7 +396,7 @@ def poser_question(questions, lecon):
     random.shuffle(answers)
 
     # On pose la question
-    print("===== Question id: %d ===== Risque: %d\n\n\n" % (q_id, risque))
+    print("===== Question id: %d ===== Risque: %d\n\n" % (q_id, risque))
     print("%s\n\n" % question_choisie[0])
 
     i = 1

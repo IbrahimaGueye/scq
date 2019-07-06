@@ -32,13 +32,7 @@ classes = [
     "tle"
 ]
 
-infos_utilisateur = [
-    ""
-]
-
-infos_generales = [
-    "New Updates coming soon..."
-]
+risques = [50, 100, 150, 200]
 
 aide = """
 Tapez le numero devant l'option pour la choisir puis appuyez sur "Entrée" pour valider.
