@@ -40,7 +40,10 @@ class User:
     def reset_compte(self):
         self.score = 0
         self.privilege = 0
-        self.reponses_cookies = {}
+
+        for key in self.reponses_cookies.keys():
+            self.reponses_cookies[key] = []
+
         print("Compte reinitilaisé")
 
     # ..............................................................................

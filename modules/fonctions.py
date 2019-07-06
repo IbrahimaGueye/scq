@@ -26,6 +26,7 @@ def infos():
             with open("..//data//infos//principale", "rb") as file:
                 lecteur = pickle.Unpickler(file)
                 infos = lecteur.load()
+
             return random.choice(infos)
         except:
             return "Une erreur est survenu ici..."
@@ -118,62 +119,66 @@ def creer_compte(nom_utilisateur=""):
     clear_screen()
 
     if nom_utilisateur == "":
-        nom_utilisateur = input("Choisissez un nom d'utilisateur: ")
+        nom_utilisateur = input("Choisissez un nom d'utilisateur (Q pour revenir au menu): ")
 
-    if len(nom_utilisateur) < 6:
-        print("Nom utilisateur invalide. Il doit au moins avoir 6 caracteres, choisissez encore...\n")
-        input("<<< retour")
-        creer_compte()
+    if nom_utilisateur.capitalize() != "Q":
+        if len(nom_utilisateur) < 6:
+            print("Nom utilisateur invalide. Il doit au moins avoir 6 caracteres, choisissez encore...\n")
+            input("<<< retour")
+            creer_compte()
 
-    else:
-        with open("..//data//users//users", "rb") as fichier:
-            lecteur = pickle.Unpickler(fichier)
-            users = lecteur.load()
+        else:
+            with open("..//data//users//users", "rb") as fichier:
+                lecteur = pickle.Unpickler(fichier)
+                users = lecteur.load()
 
-            if nom_utilisateur in users:
-                clear_screen()
-                print("Ce nom est deja pris")
-                time.sleep(2)
-                creer_compte()
-            else:
-                clear_screen()
-                print("Nom utisateur valide\n\n")
-
-                classe = input("Maintenant dites nous votre classe(2nd, 1er ou tle): ")
-
-                if classe in var.classes:
-                    # Creations des cookies de questions
-                    with open("..//data//questions//%s//liste_lecons" % classe, "rb") as file:
-                        reader = pickle.Unpickler(file)
-                        lecons = reader.load()
-
-                    for lecon in lecons:
-                        cookies[lecon] = []
-
-                    # on enregistre l'utilistateur
-                    utilisateur = User.User(nom_utilisateur, classe, cookies)
-
-                    with open("..//data//users//" + nom_utilisateur, "wb") as usr:
-                        writer = pickle.Pickler(usr)
-                        writer.dump(utilisateur)
-
-                    users.append(nom_utilisateur)
-
-                    with open("..//data//users//users", "wb") as fd:
-                        writer = pickle.Pickler(fd)
-                        writer.dump(users)
-
+                if nom_utilisateur in users:
                     clear_screen()
-                    print("Compte crée avec succes\n")
-                    print("Bienvenue, %s" % nom_utilisateur.capitalize())
+                    print("Ce nom est deja pris")
                     time.sleep(2)
-                    connecter(nom_utilisateur)
-
+                    creer_compte()
                 else:
                     clear_screen()
-                    print("Classe invalide, choisissez encore\n")
-                    input("<<< Retour ")
-                    creer_compte(nom_utilisateur)
+                    print("Nom utisateur valide\n\n")
+
+                    classe = input("Maintenant dites nous votre classe(2nd, 1er ou tle): ")
+
+                    if classe in var.classes:
+                        # Creations des cookies de questions
+                        with open("..//data//questions//%s//liste_lecons" % classe, "rb") as file:
+                            reader = pickle.Unpickler(file)
+                            lecons = reader.load()
+
+                        for lecon in lecons:
+                            cookies[lecon] = []
+
+                        # on enregistre l'utilistateur
+                        utilisateur = User.User(nom_utilisateur, classe, cookies)
+
+                        with open("..//data//users//" + nom_utilisateur, "wb") as usr:
+                            writer = pickle.Pickler(usr)
+                            writer.dump(utilisateur)
+
+                        users.append(nom_utilisateur)
+
+                        with open("..//data//users//users", "wb") as fd:
+                            writer = pickle.Pickler(fd)
+                            writer.dump(users)
+
+                        clear_screen()
+                        print("Compte crée avec succes\n")
+                        print("Bienvenue, %s" % nom_utilisateur.capitalize())
+                        time.sleep(2)
+                        connecter(nom_utilisateur)
+
+                    else:
+                        clear_screen()
+                        print("Classe invalide, choisissez encore\n")
+                        input("<<< Retour ")
+                        creer_compte(nom_utilisateur)
+
+    else:
+        pass
 
 
 def connecter(nom_utilisateur=""):
@@ -187,33 +192,35 @@ def connecter(nom_utilisateur=""):
         print("Utilisateurs enregistrés:\n")
 
         for user in users:
-            print(user, end=', ')
+            print("%s (%s)" % (user.capitalize(), user), end=', ')
 
         print("\n")
 
     if nom_utilisateur == "":
-        nom_utilisateur = input("Nom utilisateur: ")
+        nom_utilisateur = input("Nom utilisateur ('Q' pour revenir au menu): ")
 
-    with open("..//data//users//users", "rb") as fichier:
-        lecteur = pickle.Unpickler(fichier)
-        users = lecteur.load()
+    if nom_utilisateur.capitalize() != "Q":
+        with open("..//data//users//users", "rb") as fichier:
+            lecteur = pickle.Unpickler(fichier)
+            users = lecteur.load()
 
-        if nom_utilisateur in users:
-            with open("..//data//users//" + nom_utilisateur, "rb") as usr:
-                lecteur = pickle.Unpickler(usr)
-                new_utilisateur = lecteur.load()
+            if nom_utilisateur in users:
+                with open("..//data//users//" + nom_utilisateur, "rb") as usr:
+                    lecteur = pickle.Unpickler(usr)
+                    new_utilisateur = lecteur.load()
 
-            clear_screen()
-            print("Bon retour, %s\n" % nom_utilisateur.capitalize())
-            input("Continuer >>>...")
+                clear_screen()
+                print("Bon retour, %s\n" % nom_utilisateur.capitalize())
+                input("Continuer >>> ...")
 
-            var.utilisateur = new_utilisateur
+                var.utilisateur = new_utilisateur
 
-        else:
-            chx = input("Cet utilisateur n'existe pas encore, voulez vous le creer (O/N): ")
-            if chx.capitalize() != "N":
-                creer_compte(nom_utilisateur)
-
+            else:
+                chx = input("Cet utilisateur n'existe pas encore, voulez vous le creer (O/N): ")
+                if chx.capitalize() != "N":
+                    creer_compte(nom_utilisateur)
+    else:
+        pass
 
 def save():
     """
@@ -265,7 +272,6 @@ def quitter():
         save()
         print("A la prochaine!!")
         var.continuer = False
-
 
 # ................Fonctions accessibles seulement apres connection..............
 

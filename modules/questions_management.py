@@ -9,7 +9,6 @@ import pickle
 def create_quizz_question(classe, lecon):
     """
     Fonction chargee de creer une liste et fichier vierge de questions
-    :return question list:
     """
     path_to_classe = "..//data//questions//" + classe
     path_to_questions = "..//data//questions//" + classe + "//" + lecon
@@ -78,7 +77,6 @@ def create_question():
 def modify_question(classe, lecon, q_id):
     """
     Fonction chargée de modifier une question selon son q_id
-    :param q_id: position de la question sur sa liste
     """
     with open("..//data//questions//" + classe + "//" + lecon, "rb") as fichier:
         lecteur = pickle.Unpickler(fichier)
@@ -90,40 +88,54 @@ def modify_question(classe, lecon, q_id):
         print("{} : Modifier ({})\n".format(i, elt))
         i += 1
 
-    chx = int(input(">>> "))
-    print(question[chx - 1], "\n\n")
+    print("Q pour annuler")
 
-    modif = input("Entrez la nouvelle valeur: \n"
-                  )
-    question.pop(chx - 1)
-    question.insert(chx - 1, modif)
+    chx = input(">>> ")
 
-    chx = input("Voulez vous sauvegarder les modifications? (O/N): ")
-
-    # La sauvegarde
-    if chx.capitalize() != "N":
-        questions.pop(q_id)
-        questions.insert(q_id, question)
-
-        with open("..//data//questions//" + classe + "//" + lecon, "wb") as fichier:
-            writer = pickle.Pickler(fichier)
-            writer.dump(questions)
-
-
-    else:
-        chx = input("Appliquer d'autres modifications?(O/N): ")
-
-        if chx.capitalize() != "N":
+    if chx.capitalize() != "Q":
+        try:
+            chx = int(chx)
+        except ValueError:
+            print("Choisissez un nombre valide\n")
+            input("<<< Retour...")
             modify_question(classe, lecon, q_id)
+
+        else:
+            try:
+                print(question[chx - 1], "\n\n")
+            except IndexError:
+                print("Choisissez un nombre disponible\n")
+                modify_question(classe, lecon, q_id)
+            else:
+                modif = input("Entrez la nouvelle valeur: \n"
+                              )
+                question.pop(chx - 1)
+                question.insert(chx - 1, modif)
+
+                chx = input("Voulez vous sauvegarder les modifications? (O/N): ")
+
+                # La sauvegarde
+                if chx.capitalize() != "N":
+                    questions.pop(q_id)
+                    questions.insert(q_id, question)
+
+                    with open("..//data//questions//" + classe + "//" + lecon, "wb") as fichier:
+                        writer = pickle.Pickler(fichier)
+                        writer.dump(questions)
+                        print("Changements effectué!")
+
+
+                else:
+                    chx = input("Appliquer d'autres modifications?(O/N): ")
+
+                    if chx.capitalize() != "N":
+                        modify_question(classe, lecon, q_id)
+
 
 
 def supprimer_elt_question(classe, lecon, q_id):
     """
     Fonction chargée de supprimer un element d'une question
-    :param classe:
-    :param lecon:
-    :param q_id:
-    :return:
     """
     with open("..//data//questions//" + classe + "//" + lecon, "rb") as fichier:
         lecteur = pickle.Unpickler(fichier)
