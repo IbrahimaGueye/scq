@@ -20,7 +20,6 @@ from . import variables as var
 def infos():
     """
     Fonction chargée de.. charger les elements de la barre d'info/tip
-    :return a string:
     """
     if var.on_screen == "principale":
         try:
@@ -45,11 +44,9 @@ def infos():
         return " "
 
 
-# ......................................................................................................................
 def barre_infos():
     """
     Juste pour la deco...
-    :return:
     """
     print("===== Utilisateur: %s ===== Score: %d pts\n" % (var.utilisateur.nom_utilisateur.capitalize(),
                                                            var.utilisateur.score))
@@ -59,11 +56,9 @@ def barre_infos():
     print("=" * 80, "\n")
 
 
-# ......................................................................................................................
 def clear_screen():
     """
     Fonction chargée de "nettoyer" l'ecran
-    :return None:
     """
     name = os.name
     # for windows 
@@ -78,10 +73,9 @@ def clear_screen():
         barre_infos()
 
 
-# ......................................................................................................................
 def afficher_menu(txt, funcs):
     """
-
+    Fonction chargée de gerer un menu, affichage et redirection vers les autres fonctions
     """
     clear_screen()
     i = 1
@@ -112,17 +106,12 @@ def afficher_menu(txt, funcs):
     clear_screen()
 
 
-# ......................................................................................................................
 def creer_compte(nom_utilisateur=""):
     """
-    Fonction chargée de creer un utilisateur.
-    Les utilisateurs sont enregistrés sous forme de liste dans le fichier 
-    'users'.
-    A chaque creation on verifie d'abord si le nom n'est pas sur cette liste 
-    sinon on l'y ajoute et on cree un autre fichier pour l'utilisateur
-    
+    Fonction chargée de creer un un nouveau utilisateur.
     """
-    cookies = {}
+    cookies = {}  #
+
     clear_screen()
     if nom_utilisateur == "":
         nom_utilisateur = input("Choisissez un nom d'utilisateur: ")
@@ -177,7 +166,6 @@ def creer_compte(nom_utilisateur=""):
                 creer_compte(nom_utilisateur)
 
 
-# ......................................................................................................................
 def connecter(nom_utilisateur=""):
     """
     Fonction chargée de connecter un utilisateur
@@ -207,7 +195,7 @@ def connecter(nom_utilisateur=""):
                 new_utilisateur = lecteur.load()
 
             clear_screen()
-            print("Bon retour, %s" % nom_utilisateur.capitalize())
+            print("Bon retour, %s\n" % nom_utilisateur.capitalize())
             input("Continuer >>>...")
 
             var.utilisateur = new_utilisateur
@@ -218,7 +206,6 @@ def connecter(nom_utilisateur=""):
                 creer_compte(nom_utilisateur)
 
 
-# ......................................................................................................................
 def save():
     """
     Fonction chargée de Sauvegarder les infos utilisateur 
@@ -240,7 +227,6 @@ def save():
     time.sleep(0.5)
 
 
-# ......................................................................................................................
 def aide():
     """
     Fonction chargée d'afficher l'aide d'un menu
@@ -251,14 +237,12 @@ def aide():
     input("<<< Retour")
 
 
-# ......................................................................................................................
 def apropos():
     clear_screen()
-    print("Crée par Igueye, avec <3 et python3\n\n")
+    print(var.apropos)
     input("<<< Retour")
 
 
-# ......................................................................................................................
 def quitter():
     """
     Fonction appellée quand on quitte le jeu
@@ -275,6 +259,7 @@ def quitter():
 
 
 # ................Fonctions accessibles seulement apres connection..............
+
 def aff_parametres():
     """
     Fonction chargée d'afficher le menu parametre
@@ -284,7 +269,6 @@ def aff_parametres():
     afficher_menu(menus.menu_parametres_txt, menus.menu_parametres_funcs)
 
 
-# ......................................................................................................................
 def retour():
     """
     Nothing to do here, just pass and go back to user's menu
@@ -292,8 +276,6 @@ def retour():
     """
     pass
 
-
-# ......................................................................................................................
 
 def voir_stats():
     """
@@ -309,7 +291,6 @@ def voir_stats():
     input("<<< Retour")
 
 
-# ......................................................................................................................
 def se_deconnecter():
     """
     Fonction chargée de deconnecter l'utilisateur
@@ -322,7 +303,6 @@ def se_deconnecter():
     clear_screen()
 
 
-# ......................................................................................................................
 def reinitialiser_compte():
     """
     Fonction chargée de reinitialiser les données de l'utilisateur
@@ -335,7 +315,6 @@ def reinitialiser_compte():
         save()
 
 
-# ......................................................................................................................
 def change_nom_utilisateur():
     clear_screen()
     nouveau = input("Choisissez un nouveau nom d'utilisateur: ")
@@ -346,7 +325,6 @@ def change_nom_utilisateur():
         save()
 
 
-# ......................................................................................................................
 def supprimer_compte():
     """
     Fonction chargée de supprimer un utilisateur
@@ -368,7 +346,6 @@ def supprimer_compte():
         se_deconnecter()
 
 
-# ......................................................................................................................
 def init_question(classe, lecon):
     """
     Fonction chargée de charger (lol) et de retourner une liste de question specifique selon la matiere
@@ -389,7 +366,6 @@ def init_question(classe, lecon):
         return questions
 
 
-# ......................................................................................................................
 def poser_question(questions, lecon):
     """
     Fonction chargée de poser une question parmi la liste donnée en parametre et de le supprimer de la liste
@@ -441,7 +417,6 @@ def poser_question(questions, lecon):
     return questions
 
 
-# ......................................................................................................................
 def jouer():
     """
     Fonction chargée de controler une partie

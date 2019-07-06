@@ -38,3 +38,7 @@ aide = """
 Tapez le numero devant l'option pour la choisir puis appuyez sur "Entrée" pour valider.
 
 """
+
+apropos = """Sources des Questions et lecons: http://qcm-sciencesphysiques.blogspot.com, www.bac-s.net/quiz\n
+Crée par Igueye avec <3 et Python
+"""
