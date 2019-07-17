@@ -53,10 +53,15 @@ def create_question():
     """
     Fonction chargee de creer une nouvelle question
     """
+    from . import fonctions
     liste = list()
 
-    question = input("The question: ")
-    right_answer: str = input("The right answer: ")
+    question = input("La question: ")
+    fonctions.clear_screen()
+
+    right_answer = input("The bonne réponse: ")
+    fonctions.clear_screen()
+
     liste.append(question)
     liste.append(right_answer)
 
@@ -64,8 +69,10 @@ def create_question():
     while chx.capitalize() != "N":
         answer = input("Add a false answer: ")
         liste.append(answer)
+        fonctions.clear_screen()
 
         chx = input("Add another false answer (O/N)?: \n")
+        fonctions.clear_screen()
 
     explications = input("Les explications maintenant: \n")
     liste.append(explications)
@@ -173,3 +180,5 @@ def supprimer_elt_question(classe, lecon, q_id):
 #     print("(%s) Crée avec succés" % lecon)
 
 # add_question("2nd", "Mouvement", create_question())
+
+liste = create_question()

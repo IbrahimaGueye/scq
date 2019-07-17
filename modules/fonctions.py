@@ -14,9 +14,10 @@ import random
 import time
 #a comment
 
-
+from . import infos_management as im
 from . import User as User
 from . import variables as var
+from . import questions_management as qm
 
 
 def infos():
@@ -386,8 +387,6 @@ def init_question(classe, lecon):
 def poser_question(questions, lecon):
     """
     Fonction chargée de poser une question parmi la liste donnée en parametre et de le supprimer de la liste
-    :param questions:
-    :return questions sans la question choisie:
     """
     clear_screen()
     print("Questions sur %s\n" % lecon)
@@ -492,3 +491,41 @@ def jouer():
             if chx.capitalize() == "Q":
                 on_play = False
                 save()
+
+
+# ................Fonctions Administrateur..............
+
+def ajouter_question():
+    """
+    Fonction admin charger de cas ou 'utilisateur veut ajouter une question a une lecon specifique
+    """
+
+    with open("..//data//questions//%s//liste_lecons" % var.utilisateur.classe, "rb") as file:
+        reader = pickle.Unpickler(file)
+        lecons = reader.load()
+
+    print("Voici les lecons disponibles:\n")
+
+    for lecon in lecons:
+        print("%d: %s" % (i, lecon))
+        i += 1
+    print("\n")
+
+    chx = input("Sur quelle lecon souhaitez-vous ajouter la question?: ")
+
+    try:
+        chx = int(chx)
+        lecon = lecons[(chx - 1)]
+        qm.add_question(var.utilisateur.classe, lecon, qm.create_question())
+
+    except ValueError:
+        clear_screen()
+        print("Veillez choisir un numero\n")
+        input("<<< Retour")
+        ajouter_question()
+
+    except IndexError:
+        clear_screen()
+        print("Veillez choisir un numero disponible")
+        input("<<< Retour")
+        ajouter_question()
