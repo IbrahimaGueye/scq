@@ -12,6 +12,8 @@ import os
 import pickle
 import random
 import time
+#a comment
+
 
 from . import User as User
 from . import variables as var
@@ -63,7 +65,7 @@ def clear_screen():
     Fonction chargée de "nettoyer" l'ecran
     """
     name = os.name
-    # for windows 
+    # for windows
     if name == 'nt':
         _ = os.system('cls')
 
@@ -224,7 +226,7 @@ def connecter(nom_utilisateur=""):
 
 def save():
     """
-    Fonction chargée de Sauvegarder les infos utilisateur 
+    Fonction chargée de Sauvegarder les infos utilisateur
 
     """
     clear_screen()
@@ -413,7 +415,8 @@ def poser_question(questions, lecon):
     user_input = int(input("Choisissez un numero >>> "))
 
     clear_screen()
-    print("===== Question id: %d\n" % q_id)
+    print("===== Question id: %d\n\nQuestion: %s" % (q_id, question_choisie[0]))
+
     if answers[user_input - 1] == right_answer:
         var.utilisateur.aug_score(risque)
         print("\n%s, points +%d\n" % (random.choice(var.congrats), risque))
@@ -423,7 +426,7 @@ def poser_question(questions, lecon):
 
     else:
         var.utilisateur.dim_score(risque)
-        print("\nDésolé, la bonne réponse est:\n\n %s, points -%d \n\n" % (right_answer, risque))
+        print("\nDésolé, la bonne réponse est:\n\n      %s, points -%d \n\n" % (right_answer, risque))
 
     print(explications, "\n" * 2)
 
@@ -435,7 +438,7 @@ def poser_question(questions, lecon):
 def jouer():
     """
     Fonction chargée de controler une partie
-    
+
     """
     i = 1
     on_play = True
