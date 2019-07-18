@@ -12,12 +12,9 @@ import os
 import pickle
 import random
 import time
-#a comment
 
-from . import infos_management as im
 from . import User as User
 from . import variables as var
-from . import questions_management as qm
 
 
 def infos():
@@ -225,6 +222,7 @@ def connecter(nom_utilisateur=""):
     else:
         pass
 
+
 def save():
     """
     Fonction chargée de Sauvegarder les infos utilisateur
@@ -276,15 +274,29 @@ def quitter():
         print("A la prochaine!!")
         var.continuer = False
 
+
 # ................Fonctions accessibles seulement apres connection..............
+
 
 def aff_parametres():
     """
     Fonction chargée d'afficher le menu parametre
-    :return:
     """
     from . import menus
     afficher_menu(menus.menu_parametres_txt, menus.menu_parametres_funcs)
+
+
+def aff_menu_admin():
+    """
+    Fonction chargée d'afficher le menu administrateur
+    """
+    from . import menus
+
+    if var.utilisateur.privilege == 0:
+        print(var.admin_message)
+        input("<<< Retour")
+    elif var.utilisateur.privilege >= 1:
+        afficher_menu(menus.menu_admin1_txt, menus.menu_admin1_funcs)
 
 
 def retour():
@@ -341,6 +353,20 @@ def change_nom_utilisateur():
     if chx.capitalize() != "N":
         var.utilisateur.change_nom_utilisateur(nouveau)
         save()
+
+
+def check_privilege():
+    """
+    Fonction chargée de controler le privilege utilisateur
+    :return:
+    """
+    nv = 0
+
+    if var.utilisateur.score >= 100:
+        nv = 1
+
+    var.utilisateur.set_privilege(nv)
+    # save()
 
 
 def supprimer_compte():
@@ -495,11 +521,177 @@ def jouer():
 
 # ................Fonctions Administrateur..............
 
+# Questions management
+def creer_quizz(classe, lecon):
+    """
+    Fonction chargee de creer une liste et fichier vierge de questions
+    """
+    path_to_classe = "..//data//questions//%s" % classe
+    path_to_questions = "..//data//questions//%s//%s" % (classe, lecon)
+    empty_questions_list = []
+
+    # Enregistrement du fichier
+    with open(path_to_questions, "wb") as file:
+        writer = pickle.Pickler(file)
+        writer.dump(empty_questions_list)
+
+    # Enregistrement sur la liste
+    with open(path_to_classe + '//liste_lecons', 'rb') as file:
+        lecteur = pickle.Unpickler(file)
+        liste_lecons = lecteur.load()
+        liste_lecons.append(lecon)
+
+    with open(path_to_classe + '//liste_lecons', 'wb') as file:
+        writer = pickle.Pickler(file)
+        writer.dump(liste_lecons)
+
+
+# ..............................................................................
+def save_question(classe, lecon, question):
+    """
+    Fonction chargee d'ajouter une question sur la liste
+    """
+    path_to_questions = "..//data//questions//%s//%s" % (classe, lecon)
+
+    with open(path_to_questions, "rb") as file:
+        reader = pickle.Unpickler(file)
+        questions = reader.load()
+
+    questions.append(question)
+
+    with open(path_to_questions, "wb") as file:
+        writer = pickle.Pickler(file)
+        writer.dump(questions)
+        print("Question ajoutée avec succés")
+
+
+# ..............................................................................
+def creer_question():
+    """
+    Fonction chargee de creer une nouvelle question
+    """
+    # import modules.fonctions as fonctions
+    liste = list()
+
+    question = input("La question: ")
+    clear_screen()
+
+    right_answer = input("La bonne réponse: ")
+    clear_screen()
+
+    liste.append(question)
+    liste.append(right_answer)
+
+    chx = "O"
+    while chx.capitalize() != "N":
+        answer = input("Add a false answer: ")
+        liste.append(answer)
+        clear_screen()
+
+        chx = input("Ajouter une autre reponse incorrecte?  (O/N)?: \n")
+        clear_screen()
+
+    explications = input("Les explications maintenant: \n")
+    liste.append(explications)
+
+    return liste
+
+
+# ..............................................................................
+def modifier_question(classe, lecon, q_id):
+    """
+    Fonction chargée de modifier une question selon son q_id
+    """
+    with open("..//data//questions//" + classe + "//" + lecon, "rb") as fichier:
+        lecteur = pickle.Unpickler(fichier)
+        questions = lecteur.load()
+    question = questions[q_id]
+    i = 1
+
+    for elt in question:
+        print("{} : Modifier ({})\n".format(i, elt))
+        i += 1
+
+    print("Q pour annuler")
+
+    chx = input(">>> ")
+
+    if chx.capitalize() != "Q":
+        try:
+            chx = int(chx)
+        except ValueError:
+            print("Choisissez un nombre valide\n")
+            input("<<< Retour...")
+            modifier_question(classe, lecon, q_id)
+
+        else:
+            try:
+                print(question[chx - 1], "\n\n")
+            except IndexError:
+                print("Choisissez un nombre disponible\n")
+                modifier_question(classe, lecon, q_id)
+            else:
+                modif = input("Entrez la nouvelle valeur: \n"
+                              )
+                question.pop(chx - 1)
+                question.insert(chx - 1, modif)
+
+                chx = input("Voulez vous sauvegarder les modifications? (O/N): ")
+
+                # La sauvegarde
+                if chx.capitalize() != "N":
+                    questions.pop(q_id)
+                    questions.insert(q_id, question)
+
+                    with open("..//data//questions//" + classe + "//" + lecon, "wb") as fichier:
+                        writer = pickle.Pickler(fichier)
+                        writer.dump(questions)
+                        print("Changements effectué!")
+
+
+                else:
+                    chx = input("Appliquer d'autres modifications?(O/N): ")
+
+                    if chx.capitalize() != "N":
+                        modifier_question(classe, lecon, q_id)
+
+
+def supprimer_elt_question(classe, lecon, q_id):
+    """
+    Fonction chargée de supprimer un element d'une question
+    """
+    with open("..//data//questions//" + classe + "//" + lecon, "rb") as fichier:
+        lecteur = pickle.Unpickler(fichier)
+        questions = lecteur.load()
+    question = questions[q_id]
+    i = 1
+
+    for elt in question:
+        print("{} : Supprimer ({})\n".format(i, elt))
+        i += 1
+
+    chx = int(input(">>> "))
+    print(question[chx - 1], "\n\n")
+
+    question.pop(chx - 1)
+
+    chx = input("Voulez vous sauvegarder les modifications? (O/N): ")
+
+    # La sauvegarde
+    if chx.capitalize() != "N":
+        questions.pop(q_id)
+        questions.insert(q_id, question)
+
+        with open("..//data//questions//" + classe + "//" + lecon, "wb") as fichier:
+            writer = pickle.Pickler(fichier)
+            writer.dump(questions)
+
+
 def ajouter_question():
     """
     Fonction admin charger de cas ou 'utilisateur veut ajouter une question a une lecon specifique
     """
-
+    i = 0
     with open("..//data//questions//%s//liste_lecons" % var.utilisateur.classe, "rb") as file:
         reader = pickle.Unpickler(file)
         lecons = reader.load()
@@ -516,7 +708,7 @@ def ajouter_question():
     try:
         chx = int(chx)
         lecon = lecons[(chx - 1)]
-        qm.add_question(var.utilisateur.classe, lecon, qm.create_question())
+        save_question(var.utilisateur.classe, lecon, creer_question())
 
     except ValueError:
         clear_screen()

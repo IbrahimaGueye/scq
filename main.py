@@ -11,6 +11,7 @@ import modules.fonctions as fonctions
 import modules.menus as menus
 import modules.variables as var
 
+
 os.chdir('modules')
 
 while var.continuer:
@@ -20,7 +21,7 @@ while var.continuer:
     if var.utilisateur != var.default:
         # Menu utilisateur
         var.on_screen = "utilisateur"
-
+        fonctions.check_privilege()
         fonctions.afficher_menu(menus.menu_utilisateur_txt, menus.menu_utilisateur_funcs)
     else:
         # Menu principal

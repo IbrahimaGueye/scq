@@ -7,8 +7,6 @@ Created on Fri Apr 26 23:41:11 2019
 """
 
 from . import fonctions
-from . import questions_management as qm
-from . import infos_management as im
 
 menu_principal_txt = [
     "Creer un compte",
@@ -31,6 +29,7 @@ menu_utilisateur_txt = [
     "Voir les stats",
     "Afficher l'aide",
     "Parametres du compte",
+    "Menu Admin",
     "Se deconnecter",
     "A propos",
     "Quitter"
@@ -41,6 +40,7 @@ menu_utilisateur_funcs = [
     fonctions.voir_stats,
     fonctions.aide,
     fonctions.aff_parametres,
+    fonctions.aff_menu_admin,
     fonctions.se_deconnecter,
     fonctions.apropos,
     fonctions.quitter
@@ -62,13 +62,14 @@ menu_parametres_funcs = [
     fonctions.retour
 ]
 
-menu_admin_txt = [
+menu_admin1_txt = [
     "Ajouter une question a un quizz",
     "Modifier un parametre d'une question",
     "Supprimer un parametre d'une question"
+    "Retour"
 
 ]
 
-menu_admin_funcs = [
-
+menu_admin1_funcs = [
+    fonctions.ajouter_question,
 ]

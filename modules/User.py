@@ -25,18 +25,16 @@ class User:
         self.privilege = 0
         self.reponses_cookies = cookies
 
-    # ..............................................................................
     def __repr__(self):
         return "%s; Classe: %s // Score: %d // Privilege: %d\n cookies: %s " % (self.nom_utilisateur, self.classe,
                                                                                 self.score, self.privilege,
                                                                                 str(self.reponses_cookies))
 
-    # ..............................................................................
     def change_nom_utilisateur(self, nouveau):
         self.nom_utilisateur = nouveau
         print("Nom utilisateur changé a {}".format(nouveau))
 
-    # ..............................................................................
+
     def reset_compte(self):
         self.score = 0
         self.privilege = 0
@@ -46,10 +44,11 @@ class User:
 
         print("Compte reinitilaisé")
 
-    # ..............................................................................
     def aug_score(self, value):
         self.score += value
 
-    # ..............................................................................
     def dim_score(self, value):
         self.score -= value
+
+    def set_privilege(self, value):
+        self.privilege += value

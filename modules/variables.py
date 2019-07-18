@@ -44,3 +44,7 @@ Tapez le numero devant l'option pour la choisir puis appuyez sur "Entrée" pour 
 apropos = """Sources des Questions et lecons: http://qcm-sciencesphysiques.blogspot.com, www.bac-s.net/quiz\n
 Crée par Igueye avec <3 et Python\n\nContacter:\n    Email: ibzero28700@gmail.com\n    Tel: [Something here, lol]        
 """
+
+admin_message = """Il vous faut plus de points pour acceder a ce menu.\n    100pts: privilege 1\n   200pts: privilege 2
+\n
+"""
