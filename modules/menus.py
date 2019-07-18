@@ -71,5 +71,6 @@ menu_admin1_txt = [
 ]
 
 menu_admin1_funcs = [
-    fonctions.ajouter_question,
+    fonctions.check_ajouter_question,
+    fonctions.check_modifier_question
 ]

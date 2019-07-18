@@ -39,7 +39,7 @@ def infos():
             return f'Le saviez vous?: {random.choice(infos)}'
 
         except:
-            return "Une erreur est survenu ici..."
+            return "Une erreur est survenue ici..."
 
     else:
         return " "
@@ -292,6 +292,7 @@ def aff_menu_admin():
     """
     from . import menus
 
+    clear_screen()
     if var.utilisateur.privilege == 0:
         print(var.admin_message)
         input("<<< Retour")
@@ -547,7 +548,7 @@ def creer_quizz(classe, lecon):
 
 
 # ..............................................................................
-def save_question(classe, lecon, question):
+def ajouter_question(classe, lecon, question):
     """
     Fonction chargee d'ajouter une question sur la liste
     """
@@ -602,7 +603,7 @@ def modifier_question(classe, lecon, q_id):
     """
     Fonction chargée de modifier une question selon son q_id
     """
-    with open("..//data//questions//" + classe + "//" + lecon, "rb") as fichier:
+    with open("..//data//questions//%s//%s" % (classe, lecon), "rb") as fichier:
         lecteur = pickle.Unpickler(fichier)
         questions = lecteur.load()
     question = questions[q_id]
@@ -631,8 +632,7 @@ def modifier_question(classe, lecon, q_id):
                 print("Choisissez un nombre disponible\n")
                 modifier_question(classe, lecon, q_id)
             else:
-                modif = input("Entrez la nouvelle valeur: \n"
-                              )
+                modif = input("Entrez la nouvelle valeur: \n")
                 question.pop(chx - 1)
                 question.insert(chx - 1, modif)
 
@@ -643,7 +643,7 @@ def modifier_question(classe, lecon, q_id):
                     questions.pop(q_id)
                     questions.insert(q_id, question)
 
-                    with open("..//data//questions//" + classe + "//" + lecon, "wb") as fichier:
+                    with open("..//data//questions//%s//%s" % (classe, lecon), "wb") as fichier:
                         writer = pickle.Pickler(fichier)
                         writer.dump(questions)
                         print("Changements effectué!")
@@ -687,11 +687,12 @@ def supprimer_elt_question(classe, lecon, q_id):
             writer.dump(questions)
 
 
-def ajouter_question():
+def check_ajouter_question():
     """
-    Fonction admin charger de cas ou 'utilisateur veut ajouter une question a une lecon specifique
+    Fonction admin charger du cas ou 'utilisateur veut ajouter une question a une lecon specifique
     """
-    i = 0
+    clear_screen()
+    i = 1
     with open("..//data//questions//%s//liste_lecons" % var.utilisateur.classe, "rb") as file:
         reader = pickle.Unpickler(file)
         lecons = reader.load()
@@ -708,16 +709,65 @@ def ajouter_question():
     try:
         chx = int(chx)
         lecon = lecons[(chx - 1)]
-        save_question(var.utilisateur.classe, lecon, creer_question())
+        ajouter_question(var.utilisateur.classe, lecon, creer_question())
 
     except ValueError:
         clear_screen()
         print("Veillez choisir un numero\n")
         input("<<< Retour")
-        ajouter_question()
+        check_ajouter_question()
 
     except IndexError:
         clear_screen()
         print("Veillez choisir un numero disponible")
         input("<<< Retour")
-        ajouter_question()
+        check_ajouter_question()
+
+
+def check_modifier_question(lecon=""):
+    """
+
+    :return:
+    """
+    i = 1
+    with open("..//data//questions//%s//liste_lecons" % var.utilisateur.classe, "rb") as file:
+        reader = pickle.Unpickler(file)
+        lecons = reader.load()
+
+    print("Voici les lecons disponibles:\n")
+
+    for lecon in lecons:
+        print("%d: %s" % (i, lecon))
+        i += 1
+    print("\n")
+
+    chx = input("Sur quelle lecon se trouve la question?: ")
+    clear_screen()
+
+    try:
+        chx = int(chx)
+        lecon = lecons[(chx - 1)]
+
+        q_id = input("Veillez saisir le id de la question: ")
+        try:
+            q_id = int(q_id)
+
+        except ValueError:
+            clear_screen()
+            print("Veillez choisir un numero\n")
+            input("<<< Retour")
+            check_modifier_question(lecon)
+        else:
+            modifier_question(var.utilisateur.classe, lecon, q_id)
+
+    except ValueError:
+        clear_screen()
+        print("Veillez choisir un numero\n")
+        input("<<< Retour")
+        check_modifier_question(lecon)
+
+    except IndexError:
+        clear_screen()
+        print("Veillez choisir un numero disponible")
+        input("<<< Retour")
+        check_modifier_question(lecon)
