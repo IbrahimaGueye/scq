@@ -49,8 +49,10 @@ def barre_infos():
     """
     Juste pour la deco...
     """
-    print("===== Utilisateur: %s ===== Score: %d pts\n" % (var.utilisateur.nom_utilisateur.capitalize(),
-                                                           var.utilisateur.score))
+    print("===== Utilisateur: %s ===== Privilege: %s ===== Score: %d pts\n"
+          % (var.utilisateur.nom_utilisateur.capitalize(),
+             var.privileges[var.utilisateur.privilege],
+             var.utilisateur.score))
 
     print("=" * 80, "\n")
     print(infos(), "\n")
@@ -73,6 +75,7 @@ def clear_screen():
 
     if var.continuer:
         barre_infos()
+        check_privilege()
 
 
 def afficher_menu(txt, funcs):
@@ -110,7 +113,7 @@ def afficher_menu(txt, funcs):
     clear_screen()
 
 
-def creer_compte(nom_utilisateur=""):
+def creer_profile(nom_utilisateur=""):
     """
     Fonction chargée de creer un un nouveau utilisateur.
     """
@@ -125,7 +128,7 @@ def creer_compte(nom_utilisateur=""):
         if len(nom_utilisateur) < 6:
             print("Nom utilisateur invalide. Il doit au moins avoir 6 caracteres, choisissez encore...\n")
             input("<<< retour")
-            creer_compte()
+            creer_profile()
 
         else:
             with open("..//data//users//users", "rb") as fichier:
@@ -136,7 +139,7 @@ def creer_compte(nom_utilisateur=""):
                     clear_screen()
                     print("Ce nom est deja pris")
                     time.sleep(2)
-                    creer_compte()
+                    creer_profile()
                 else:
                     clear_screen()
                     print("Nom utisateur valide\n\n")
@@ -175,7 +178,7 @@ def creer_compte(nom_utilisateur=""):
                         clear_screen()
                         print("Classe invalide, choisissez encore\n")
                         input("<<< Retour ")
-                        creer_compte(nom_utilisateur)
+                        creer_profile(nom_utilisateur)
 
     else:
         pass
@@ -218,7 +221,7 @@ def connecter(nom_utilisateur=""):
             else:
                 chx = input("Cet utilisateur n'existe pas encore, voulez vous le creer (O/N): ")
                 if chx.capitalize() != "N":
-                    creer_compte(nom_utilisateur)
+                    creer_profile(nom_utilisateur)
     else:
         pass
 
@@ -363,11 +366,18 @@ def check_privilege():
     """
     nv = 0
 
-    if var.utilisateur.score >= 100:
+    if var.utilisateur.score < 500:
+        nv = 0
+
+    elif 500 <= var.utilisateur.score < 1000:
         nv = 1
 
+    elif 1000 <= var.utilisateur.score < 2000:
+        nv = 2
+    else:
+        nv = 3
+
     var.utilisateur.set_privilege(nv)
-    # save()
 
 
 def supprimer_compte():
@@ -552,6 +562,7 @@ def ajouter_question(classe, lecon, question):
     """
     Fonction chargee d'ajouter une question sur la liste
     """
+    clear_screen()
     path_to_questions = "..//data//questions//%s//%s" % (classe, lecon)
 
     with open(path_to_questions, "rb") as file:
@@ -571,11 +582,10 @@ def creer_question():
     """
     Fonction chargee de creer une nouvelle question
     """
-    # import modules.fonctions as fonctions
+    clear_screen()
     liste = list()
 
     question = input("La question: ")
-    clear_screen()
 
     right_answer = input("La bonne réponse: ")
     clear_screen()

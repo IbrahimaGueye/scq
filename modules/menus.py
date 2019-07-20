@@ -9,7 +9,7 @@ Created on Fri Apr 26 23:41:11 2019
 from . import fonctions
 
 menu_principal_txt = [
-    "Creer un compte",
+    "Creer un nouveau profile",
     "Se connecter",
     "Afficher l'aide",
     "A propos",
@@ -17,7 +17,7 @@ menu_principal_txt = [
 ]
 
 menu_principal_funcs = [
-    fonctions.creer_compte,
+    fonctions.creer_profile,
     fonctions.connecter,
     fonctions.aide,
     fonctions.apropos,

@@ -21,7 +21,7 @@ while var.continuer:
     if var.utilisateur != var.default:
         # Menu utilisateur
         var.on_screen = "utilisateur"
-        fonctions.check_privilege()
+        # fonctions.check_privilege()
         fonctions.afficher_menu(menus.menu_utilisateur_txt, menus.menu_utilisateur_funcs)
     else:
         # Menu principal

@@ -34,6 +34,13 @@ classes = [
     "tle"
 ]
 
+privileges = [
+    "Utilisateur",
+    "Administrateur",
+    "Super Admin",
+    "Sudo level"
+]
+
 risques = [50, 100, 150, 200]
 
 aide = """
@@ -45,6 +52,9 @@ apropos = """Sources des Questions et lecons: http://qcm-sciencesphysiques.blogs
 Crée par Igueye avec <3 et Python\n\nContacter:\n    Email: ibzero28700@gmail.com\n    Tel: [Something here, lol]        
 """
 
-admin_message = """Il vous faut plus de points pour acceder a ce menu.\n   100pts: privilege 1\n   200pts: privilege 2
-\n
+admin_message = """Il vous faut plus de points pour acceder a ce menu.
+    500  pts: privilege 1
+    1000 pts: privilege 2
+    2000 pts: privilege 3
+   +3000 pts: privilege 4\n
 """

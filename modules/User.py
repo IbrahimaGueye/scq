@@ -51,4 +51,4 @@ class User:
         self.score -= value
 
     def set_privilege(self, value):
-        self.privilege += value
+        self.privilege = value
