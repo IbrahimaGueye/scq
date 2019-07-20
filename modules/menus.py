@@ -64,13 +64,17 @@ menu_parametres_funcs = [
 
 menu_admin1_txt = [
     "Ajouter une question a un quizz",
-    "Modifier un parametre d'une question",
-    "Supprimer un parametre d'une question"
+    "Modifier un élément d'une question",
+    "Supprimer un élement d'une question",
+    "Supprimer une question",
     "Retour"
 
 ]
 
 menu_admin1_funcs = [
     fonctions.check_ajouter_question,
-    fonctions.check_modifier_question
+    fonctions.check_modifier_elt_question
+    fonctions.supprimer_elt_question,
+    fonctions.supprimer_question,
+    fonctions.retour
 ]

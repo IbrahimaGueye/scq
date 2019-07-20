@@ -117,7 +117,7 @@ def creer_profile(nom_utilisateur=""):
     """
     Fonction chargée de creer un un nouveau utilisateur.
     """
-    cookies = {}  #
+    cookies = {}
 
     clear_screen()
 
@@ -195,7 +195,7 @@ def connecter(nom_utilisateur=""):
         print("Utilisateurs enregistrés:\n")
 
         for user in users:
-            print("%s (%s)" % (user.capitalize(), user), end=', ')
+            print("%s (%s)" % (user.capitalize(), user), end=' | ')
 
         print("\n")
 
@@ -217,7 +217,6 @@ def connecter(nom_utilisateur=""):
                 input("Continuer >>> ...")
 
                 var.utilisateur = new_utilisateur
-
             else:
                 chx = input("Cet utilisateur n'existe pas encore, voulez vous le creer (O/N): ")
                 if chx.capitalize() != "N":
@@ -557,7 +556,6 @@ def creer_quizz(classe, lecon):
         writer.dump(liste_lecons)
 
 
-# ..............................................................................
 def ajouter_question(classe, lecon, question):
     """
     Fonction chargee d'ajouter une question sur la liste
@@ -577,7 +575,6 @@ def ajouter_question(classe, lecon, question):
         print("Question ajoutée avec succés")
 
 
-# ..............................................................................
 def creer_question():
     """
     Fonction chargee de creer une nouvelle question
@@ -608,8 +605,16 @@ def creer_question():
     return liste
 
 
-# ..............................................................................
-def modifier_question(classe, lecon, q_id):
+def supprimer_question(classe, lecon, q_id):
+    """
+
+    :param lecon:
+    :return:
+    """
+    pass
+
+
+def modifier_elt_question(classe, lecon, q_id):
     """
     Fonction chargée de modifier une question selon son q_id
     """
@@ -633,14 +638,14 @@ def modifier_question(classe, lecon, q_id):
         except ValueError:
             print("Choisissez un nombre valide\n")
             input("<<< Retour...")
-            modifier_question(classe, lecon, q_id)
+            modifier_elt_question(classe, lecon, q_id)
 
         else:
             try:
                 print(question[chx - 1], "\n\n")
             except IndexError:
                 print("Choisissez un nombre disponible\n")
-                modifier_question(classe, lecon, q_id)
+                modifier_elt_question(classe, lecon, q_id)
             else:
                 modif = input("Entrez la nouvelle valeur: \n")
                 question.pop(chx - 1)
@@ -663,14 +668,14 @@ def modifier_question(classe, lecon, q_id):
                     chx = input("Appliquer d'autres modifications?(O/N): ")
 
                     if chx.capitalize() != "N":
-                        modifier_question(classe, lecon, q_id)
+                        modifier_elt_question(classe, lecon, q_id)
 
 
 def supprimer_elt_question(classe, lecon, q_id):
     """
     Fonction chargée de supprimer un element d'une question
     """
-    with open("..//data//questions//" + classe + "//" + lecon, "rb") as fichier:
+    with open("..//data//questions//%s//%s" % (classe, lecon), "rb") as fichier:
         lecteur = pickle.Unpickler(fichier)
         questions = lecteur.load()
     question = questions[q_id]
@@ -692,7 +697,7 @@ def supprimer_elt_question(classe, lecon, q_id):
         questions.pop(q_id)
         questions.insert(q_id, question)
 
-        with open("..//data//questions//" + classe + "//" + lecon, "wb") as fichier:
+        with open("..//data//questions//%s//%s" % (classe, lecon), "wb") as fichier:
             writer = pickle.Pickler(fichier)
             writer.dump(questions)
 
@@ -734,10 +739,10 @@ def check_ajouter_question():
         check_ajouter_question()
 
 
-def check_modifier_question(lecon=""):
+def check_modifier_elt_question(lecon=""):
     """
+    Fonction chargée du cas ou l'utilsateur souhaite modifier une question
 
-    :return:
     """
     i = 1
     with open("..//data//questions//%s//liste_lecons" % var.utilisateur.classe, "rb") as file:
@@ -766,18 +771,68 @@ def check_modifier_question(lecon=""):
             clear_screen()
             print("Veillez choisir un numero\n")
             input("<<< Retour")
-            check_modifier_question(lecon)
+            check_modifier_elt_question(lecon)
         else:
-            modifier_question(var.utilisateur.classe, lecon, q_id)
+            modifier_elt_question(var.utilisateur.classe, lecon, q_id)
 
     except ValueError:
         clear_screen()
         print("Veillez choisir un numero\n")
         input("<<< Retour")
-        check_modifier_question(lecon)
+        check_modifier_elt_question(lecon)
 
     except IndexError:
         clear_screen()
         print("Veillez choisir un numero disponible")
         input("<<< Retour")
-        check_modifier_question(lecon)
+        check_modifier_elt_question(lecon)
+
+
+def check_supprimer_elt_question(lecon=""):
+    """
+    Fonction chargée du cas ou l'utilsateur souhaite supprimer un element d'une question
+
+    """
+    clear_screen()
+    i = 1
+    with open("..//data//questions//%s//liste_lecons" % var.utilisateur.classe, "rb") as file:
+        reader = pickle.Unpickler(file)
+        lecons = reader.load()
+
+    print("Voici les lecons disponibles:\n")
+
+    for lecon in lecons:
+        print("%d: %s" % (i, lecon))
+        i += 1
+    print("\n")
+
+    chx = input("Sur quelle lecon se trouve la question?: ")
+    clear_screen()
+
+    try:
+        chx = int(chx)
+        lecon = lecons[(chx - 1)]
+
+        q_id = input("Veillez saisir le id de la question: ")
+        try:
+            q_id = int(q_id)
+
+        except ValueError:
+            clear_screen()
+            print("Veillez choisir un numero\n")
+            input("<<< Retour")
+            check_supprimer_elt_question(lecon)
+        else:
+            supprimer_elt_question(var.utilisateur.classe, lecon, q_id)
+
+    except ValueError:
+        clear_screen()
+        print("Veillez choisir un numero\n")
+        input("<<< Retour")
+        check_supprimer_elt_question(lecon)
+
+    except IndexError:
+        clear_screen()
+        print("Veillez choisir un numero disponible")
+        input("<<< Retour")
+        check_supprimer_elt_question(lecon)

@@ -52,9 +52,9 @@ apropos = """Sources des Questions et lecons: http://qcm-sciencesphysiques.blogs
 Crée par Igueye avec <3 et Python\n\nContacter:\n    Email: ibzero28700@gmail.com\n    Tel: [Something here, lol]        
 """
 
-admin_message = """Il vous faut plus de points pour acceder a ce menu.
-    500  pts: privilege 1
-    1000 pts: privilege 2
-    2000 pts: privilege 3
-   +3000 pts: privilege 4\n
+admin_message = """Il vous faut plus de points pour acceder a ce menu.\n
+  Points | Privileges\n
+    500  |  1
+    1000 |  2
+   +2000 |  3\n
 """
