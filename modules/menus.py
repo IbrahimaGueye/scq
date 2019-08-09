@@ -73,7 +73,7 @@ menu_admin1_txt = [
 
 menu_admin1_funcs = [
     fonctions.check_ajouter_question,
-    fonctions.check_modifier_elt_question
+    fonctions.check_modifier_elt_question,
     fonctions.supprimer_elt_question,
     fonctions.supprimer_question,
     fonctions.retour

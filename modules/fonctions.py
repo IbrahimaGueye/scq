@@ -17,6 +17,17 @@ from . import User as User
 from . import variables as var
 
 
+def help_screen():
+    """
+    Fonction chargée de guider l'utilisateur au debut du jeu
+    :return:
+    """
+    clear_screen()
+    print(var.texte_debut)
+    time.sleep(1)
+    input("Appuyez sur Entrée pour continuer...")
+
+
 def infos():
     """
     Fonction chargée de.. charger les elements de la barre d'info/tip
@@ -85,7 +96,7 @@ def afficher_menu(txt, funcs):
     clear_screen()
     i = 1
     for elt in txt:
-        print("{}: {} \n".format(i, elt))
+        print("%d: %s\n" % (i, elt))
         i += 1
 
     chx = input(">>> ")
@@ -122,6 +133,7 @@ def creer_profile(nom_utilisateur=""):
     clear_screen()
 
     if nom_utilisateur == "":
+        print("Le nom d'utilisateur doit, au moins, avoir 6 caracteres\n")
         nom_utilisateur = input("Choisissez un nom d'utilisateur (Q pour revenir au menu): ")
 
     if nom_utilisateur.capitalize() != "Q":
@@ -329,7 +341,6 @@ def se_deconnecter():
     Fonction chargée de deconnecter l'utilisateur
     """
     clear_screen()
-    print("A la prochaine!\n")
     input("<<< Sortir... ")
     var.utilisateur = var.default
     var.on_screen = "principale"
@@ -420,14 +431,16 @@ def init_question(classe, lecon):
         return questions
 
 
-def poser_question(questions, lecon):
+def poser_question(questions, lecon, q_id=None):
     """
-    Fonction chargée de poser une question parmi la liste donnée en parametre et de le supprimer de la liste
+    Fonction chargée de poser une question parmi la liste donnée en parametre et de la supprimer de la liste
     """
     clear_screen()
     print("Questions sur %s\n" % lecon)
 
-    q_id = random.randrange(len(questions))
+    if q_id is None:
+        q_id = random.randrange(len(questions))
+
     risque = random.choice(var.risques)  # Points perdus ou gagnés
 
     question_choisie = questions[q_id]  # La question choisie parmi la liste donnée.
@@ -444,30 +457,50 @@ def poser_question(questions, lecon):
     i = 1
 
     for answer in answers:
-        print("{}: {} \n".format(i, answer))
+        print("%d: %s\n" % (i, answer))
         i += 1
 
-    user_input = int(input("Choisissez un numero >>> "))
+    user_input = input("Choisissez un numero ('Q' pour quitter) >>> ")
 
-    clear_screen()
-    print("===== Question id: %d\n\nQuestion: %s" % (q_id, question_choisie[0]))
+    if user_input.capitalize() != "Q":
+        try:
+            user_input = int(user_input)
+        except ValueError:
+            clear_screen()
+            input("Choix invalide, verifiez encore...( Appuyez sur 'Entrée' pour continuer)")
+            poser_question(questions, lecon, q_id)
+        else:
+            try:
+                answer = answers[user_input - 1]
+            except IndexError:
+                clear_screen()
+                input("Choix invalide, verifiez encore...( Appuyez sur 'Entrée' pour continuer)")
+                poser_question(questions, lecon, q_id)
+            else:
+                clear_screen()
+                print("===== Question id: %d\n\nQuestion: %s" % (q_id, question_choisie[0]))
 
-    if answers[user_input - 1] == right_answer:
-        var.utilisateur.aug_score(risque)
-        print("\n%s, points +%d\n" % (random.choice(var.congrats), risque))
-        # On ajoute la question a la liste des questions trouvées...
-        var.utilisateur.reponses_cookies[lecon].append(q_id)
+                if answer == right_answer:
+                    var.utilisateur.aug_score(risque)
+                    print("\n%s, points +%d\n" % (random.choice(var.congrats), risque))
 
+                    # On ajoute la question a la liste des questions trouvées...
+                    var.utilisateur.reponses_cookies[lecon].append(q_id)
+                else:
+                    var.utilisateur.dim_score(risque)
+                    print("\nDésolé, la bonne réponse est:\n\n      %s, points -%d \n\n" % (right_answer, risque))
 
+                print(explications, "\n" * 2)
+                questions.pop(q_id)
+
+                chx = input("Continuer? 'Q' pour quitter: ")
+                if chx.capitalize() == 'Q':
+                    return 'quit'
+                else:
+                    return questions
     else:
-        var.utilisateur.dim_score(risque)
-        print("\nDésolé, la bonne réponse est:\n\n      %s, points -%d \n\n" % (right_answer, risque))
-
-    print(explications, "\n" * 2)
-
-    questions.pop(q_id)
-
-    return questions
+        return "quit"
+        pass
 
 
 def jouer():
@@ -491,42 +524,48 @@ def jouer():
         i += 1
     print("\n")
 
-    chx = input("Sur quelle lecon souhaitez-vous travaillez?: ")
+    chx = input("Sur quelle lecon souhaitez-vous travaillez? ('Q' pour quitter): ")
 
-    try:
-        chx = int(chx)
-        lecon = lecons[(chx - 1)]
-
-    except ValueError:
-        clear_screen()
-        print("Veillez choisir un numero\n")
-        input("<<< Retour")
-        jouer()
+    if chx.capitalize() == "Q":
+        on_play = False
+        save()
 
     else:
         try:
-            var.questions = init_question(var.utilisateur.classe, lecons[(chx - 1)])
+            chx = int(chx)
             lecon = lecons[(chx - 1)]
-        except IndexError:
+
+        except ValueError:
             clear_screen()
-            print("Veillez choisir un numero disponible")
+            print("Veillez choisir un numero\n")
             input("<<< Retour")
             jouer()
 
-    while on_play:
-        if len(var.questions) == 0:
-            clear_screen()
-            print("Vous avez repondu correctement à toutes les questions! %s!" % (random.choice(var.congrats)))
-            input("<<< Retour")
-            on_play = False
-            save()
         else:
-            var.questions = poser_question(var.questions, lecon)
-            chx = input("Continuer ou quitter (Q) ?: ")
+            try:
+                var.questions = init_question(var.utilisateur.classe, lecons[(chx - 1)])
+                lecon = lecons[(chx - 1)]
+            except IndexError:
+                clear_screen()
+                print("Veillez choisir un numero disponible")
+                input("<<< Retour")
+                jouer()
 
-            if chx.capitalize() == "Q":
+        while on_play:
+            if len(var.questions) == 0:  # Tant qu'il y'a des questions dans la liste
+                clear_screen()
+                print("Vous avez repondu correctement à toutes les questions! %s!" % (random.choice(var.congrats)))
+                input("<<< Retour")
                 on_play = False
                 save()
+            else:
+                returned_value = poser_question(var.questions, lecon)
+
+                if type(returned_value) == list:
+                    var.questions = returned_value
+                else:
+                    on_play = False
+                    save()
 
 
 # ................Fonctions Administrateur..............

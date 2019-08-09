@@ -14,6 +14,8 @@ import modules.variables as var
 
 os.chdir('modules')
 
+fonctions.help_screen()
+
 while var.continuer:
     """
     MainLoop...

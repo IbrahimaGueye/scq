@@ -58,3 +58,9 @@ admin_message = """Il vous faut plus de points pour acceder a ce menu.\n
     1000 |  2
    +2000 |  3\n
 """
+
+texte_debut = """
+Bienvenue sur Scq! Tapez le numero devant l'option ou evrivez l'option entre-parentheses pour la choisir puis appuyez sur "Entrée" pour valider.
+
+
+"""
